@@ -25,7 +25,7 @@ SERVICE=name_of_script
 
 RUNS_FILE=full/path/to/the/file/runs.txt
 
-BCL2FASQT=path/to/the/executable/bcl2fatsq
+BCL2FASTQ=path/to/the/executable/bcl2fastq
 
 * You should have a directory ${RUNS_DIR}/converted and write permissions on ${RUNS_DIR}.
 
