@@ -1,5 +1,5 @@
-BASE_DIR=/nas/data/
-RUNS_DIR=${BASE_DIR}NEXTSEQ/Runs/
-SERVICE=autofastq.1.1.sh
-RUNS_FILE=/home/adminngs/autofastq/runs.txt
-BCL2FASTQ=/usr/local/bin/bcl2fastq
+BASE_DIR=full/path/to/your/illumina/folder
+RUNS_DIR=actual/path/to/the/runs
+SERVICE=script_name
+RUNS_FILE=full/path/to/the/file/runs.txt
+BCL2FASTQ=path/to/the/executable/bcl2fastq
