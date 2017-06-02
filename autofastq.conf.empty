@@ -1,0 +1,5 @@
+BASE_DIR=/nas/data/
+RUNS_DIR=${BASE_DIR}NEXTSEQ/Runs/
+SERVICE=autofastq.1.1.sh
+RUNS_FILE=/home/adminngs/autofastq/runs.txt
+BCL2FASTQ=/usr/local/bin/bcl2fastq
