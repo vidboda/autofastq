@@ -2,10 +2,10 @@
 script to automate Illumina bcl2fastq utility
 
 ## Goals
-Illumina runs generates bcl files that need to be converted to fastq before secondary analysis. This script automates and monitors de conversion.
+Illumina runs generates bcl files that need to be converted to fastq before secondary analysis. This script automates and monitors the conversion.
 
 ## What is it
-This is a simple shell script. It reads a very simple conf file mainly to get patho from your environment.
+This is a simple shell script. It reads a very simple conf file mainly to get path from your environment.
 It also uses a simple text file (runs.txt) as database to keep track of the runs and possibly requeue a conversion.
 The script should be croned at your convenience.
 
