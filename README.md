@@ -19,9 +19,9 @@ Clone the repository, then complete the autofastq.conf.empty file with the follo
 
 BASE_DIR=full/path/to/your/illumina/folder
 
-RUNS_DIR=actual/path/to/the/runs
+RUNS_DIR=actual/partial/path/to/the/runs (from ${BASE_DIR})
 
-SERVICE=name_of_script
+SERVICE=name_of_script.sh
 
 RUNS_FILE=full/path/to/the/file/runs.txt
 
