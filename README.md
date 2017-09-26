@@ -13,7 +13,7 @@ The script should be croned at your convenience.
 The script just checks the run directory and looks for new runs that possibly can be terminated (presence of the RTAComplete.txt file).
 
 ## Installation
-* First you need to install [bcl2fastq](https://support.illumina.com/downloads/bcl2fastq-conversion-software-v2-18.html).
+* First you need to install [bcl2fastq](https://support.illumina.com/downloads.html).
 
 Clone the repository, then complete the autofastq.conf.empty file with the following paths and rename it to autofastq.conf:
 
