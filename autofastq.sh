@@ -112,6 +112,8 @@ do
 			###check for samplesheet presence 160818 david
 			if [ -e "${RUNS_DIR}samplesheets/${PREFIX}.csv" ];then
 			###
+				#david 18/10/2018 dos2unix added
+				"${DOS2UNIX}" "${RUNS_DIR}samplesheets/${PREFIX}.csv"
 				###david 19/08/16 copy run folder in  'conversion_tmp' subfolder
 				echo "$(date) copying ${RUN} in conversion_tmp/ folder"
 				rsync -avq --exclude='Data' "${RUNS_DIR}${RUN}" "${RUNS_DIR}conversion_tmp/"
@@ -129,6 +131,7 @@ do
 				#comment to test blank
 				mkdir -p "${RUNS_DIR}conversion_tmp/${RUN}/bcl2fastq"				
 				touch "${RUNS_DIR}conversion_tmp/${RUN}/bcl2fastq/bcl2fastq.log"
+				cp "${RUNS_DIR}samplesheets/${PREFIX}.csv" "${RUNS_DIR}conversion_tmp/${RUN}/bcl2fastq/SampleSheet.csv"
 				mkdir -p "${RUNS_DIR}conversion_tmp/${RUN}/FastQs"
 				####change samplesheet management 160818 david
 				nohup ${BCL2FASTQ} -R ${RUNS_DIR}${RUN} --stats-dir ${RUNS_DIR}conversion_tmp/${RUN}/bcl2fastq --reports-dir ${RUNS_DIR}conversion_tmp/${RUN}/bcl2fastq --barcode-mismatches 0 --no-lane-splitting --sample-sheet ${RUNS_DIR}samplesheets/${PREFIX}.csv -o ${RUNS_DIR}conversion_tmp/${RUN}/FastQs > ${RUNS_DIR}conversion_tmp/${RUN}/bcl2fastq/bcl2fastq.log 2>&1

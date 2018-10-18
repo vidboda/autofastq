@@ -3,3 +3,4 @@ RUNS_DIR=actual/path/to/the/runs
 SERVICE=script_name
 RUNS_FILE=full/path/to/the/file/runs.txt
 BCL2FASTQ=path/to/the/executable/bcl2fastq
+DOS2UNIX=patho/to/dos2unix
