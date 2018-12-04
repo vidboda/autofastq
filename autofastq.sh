@@ -68,6 +68,14 @@ if [ "${RESULT}" -gt 3 ]; then
 fi 
 #echo "Passed"
 
+###############		Test if ${RUNS_FILE} file is writable		##################################
+
+if [ ! -w ${RUNS_FILE} ];then
+	echo "$(date) ERROR: ${RUNS_FILE} not writable!!!"
+	exit 1
+fi
+
+
 ###############		Get run info file				 ##################################
 
 # the file contains the run id and a code
