@@ -139,7 +139,7 @@ do
 				#comment to test blank
 				mkdir -p "${RUNS_DIR}conversion_tmp/${RUN}/bcl2fastq"				
 				touch "${RUNS_DIR}conversion_tmp/${RUN}/bcl2fastq/bcl2fastq.log"
-				cp "${RUNS_DIR}samplesheets/${PREFIX}.csv" "${RUNS_DIR}conversion_tmp/${RUN}/bcl2fastq/SampleSheet.csv"
+				rsync -avq "${RUNS_DIR}samplesheets/${PREFIX}.csv" "${RUNS_DIR}conversion_tmp/${RUN}/bcl2fastq/SampleSheet.csv"
 				mkdir -p "${RUNS_DIR}conversion_tmp/${RUN}/FastQs"
 				####change samplesheet management 160818 david
 				nohup ${BCL2FASTQ} -R ${RUNS_DIR}${RUN} --stats-dir ${RUNS_DIR}conversion_tmp/${RUN}/bcl2fastq --reports-dir ${RUNS_DIR}conversion_tmp/${RUN}/bcl2fastq --barcode-mismatches 0 --no-lane-splitting --sample-sheet ${RUNS_DIR}samplesheets/${PREFIX}.csv -o ${RUNS_DIR}conversion_tmp/${RUN}/FastQs > ${RUNS_DIR}conversion_tmp/${RUN}/bcl2fastq/bcl2fastq.log 2>&1
@@ -152,11 +152,14 @@ do
 					##Change value on array and file to done		
 					sed -i -e "s/${RUN}=1/${RUN}=2/g" "${RUNS_FILE}"
 					RUN_ARRAY[${RUN}]=2
+					#run md5 check sum on fastqs
+					md5sum "${RUNS_DIR}conversion_tmp/${RUN}/FastQs/*.fastq.gz" >"${RUNS_DIR}conversion_tmp/${RUN}/FastQs/md5.txt"
 					#move run in 'converted' folder
 					#mv "${RUNS_DIR}conversion_tmp/${RUN}" "${RUNS_DIR}converted/${RUN}" && echo "$(date) ${RUN} moved to ${RUNS_DIR}converted/${RUN}"
 					#echo "MV COMMAND (DEBUGGING): mv \"${RUNS_DIR}conversion_tmp/${RUN}\" \"${RUNS_DIR}converted/${RUN}\""
-					#170131 david changed mv with cp && rm
-					cp -R "${RUNS_DIR}conversion_tmp/${RUN}" "${RUNS_DIR}converted/${RUN}"
+										
+#170131 david changed mv with cp && rm
+					rsync -avq "${RUNS_DIR}conversion_tmp/${RUN}" "${RUNS_DIR}converted/${RUN}"
 					#echo "cp Exit status $?"
 					if [ "$?" -eq 0 ];then
 						rm -rf "${RUNS_DIR}conversion_tmp/${RUN}"
