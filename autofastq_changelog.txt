@@ -5,6 +5,8 @@ $ chmod 440 runs.txt
 $ sh autofastq.sh 
 mar. déc.  4 17:32:16 CET 2018 ERROR: /home/adminngs/autofastq/runs.txt not writable!!!
 -------------------------
+#18/10/2018
+dos2unix added on samplesheet
 #2016/08/18
 v1.1
 -changed the way of managing samplesheets. Should now be named AAMMJJ.csv and placed in folder ${RUNS_DIR}/samplesheets

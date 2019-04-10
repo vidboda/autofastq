@@ -1,6 +1,9 @@
-BASE_DIR=full/path/to/your/illumina/folder
-RUNS_DIR=actual/path/to/the/runs
-SERVICE=script_name
-RUNS_FILE=full/path/to/the/file/runs.txt
-BCL2FASTQ=path/to/the/executable/bcl2fastq
-DOS2UNIX=patho/to/dos2unix
+BASE_DIR=/full/path/to/your/illumina/folder
+RUNS_DIR=/actual/path/to/the/runs
+SERVICE=script_name(autofastq.sh)
+RUNS_FILE=/full/path/to/the/file/runs.txt
+BCL2FASTQ=/path/to/the/executable/bcl2fastq
+DOS2UNIX=/patho/to/dos2unix
+RSYNC=/path/to/rsync
+MD5=true
+MD5EXE=/path/to/md5(sum)
