@@ -1,5 +1,6 @@
 BASE_DIR=/full/path/to/your/illumina/folder
 RUNS_DIR=/actual/path/to/the/runs
+SSHEET_DIR_NAME=samplesheets(samplesheets folder basename inside $RUNS_DIR)
 SERVICE=script_name(autofastq.sh)
 RUNS_FILE=/full/path/to/the/file/runs.txt
 BCL2FASTQ=/path/to/the/executable/bcl2fastq

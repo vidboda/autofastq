@@ -50,7 +50,7 @@ CONFIG_FILE='/home/adminngs/autofastq/autofastq.conf'
 
 UNKNOWN=$(cat  ${CONFIG_FILE} | grep -Evi "^(#.*|[A-Z0-9_]*=[a-z0-9_ \.\/\$\{\}]*)$")
 if [ -n "${UNKNOWN}" ]; then
-	echo "Error in config file. Not allowed lines:"
+	echo "$(date) ERROR: in config file. Not allowed lines:"
 	echo ${UNKNOWN}
 	exit 1
 fi
@@ -106,8 +106,7 @@ done < ${RUNS_FILE}
 #http://moinne.com/blog/ronald/bash/list-directory-names-in-bash-shell
 #--time-style is used here to ensure awk $8 will return the right thing (dir name)
 RUNS=$(ls -l --time-style="long-iso" ${RUNS_DIR} | egrep '^d' | awk '{print $8}')
-TARGET='converted'
-SSHEET_FOLDER='samplesheets'
+#TARGET='converted'
 #command above does not work on OSX
 
 for RUN in ${RUNS}
@@ -117,16 +116,16 @@ do
 		PREFIX=$(echo ${RUN} | cut -d '_' -f 1)
 		###
 		#now we must look for the RTAComplete.txt file
-		if [ -e "${RUNS_DIR}${RUN}/RTAComplete.txt" ] && [ ! -e "${RUNS_DIR}${TARGET}/${RUN}/RTAComplete.txt" ]; then
+		if [ -e "${RUNS_DIR}${RUN}/RTAComplete.txt" ];then # && [ ! -e "${RUNS_DIR}${TARGET}/${RUN}/RTAComplete.txt" ]; then
 			#if [ -e "${RUNS_DIR}${RUN}/SampleSheet.csv" ];then
 			###check for samplesheet presence 160818 david
-			if [ -e "${RUNS_DIR}${SSHEET_FOLDER}/${PREFIX}.csv" ];then
+			if [ -e "${RUNS_DIR}${SSHEET_DIR_NAME}/${PREFIX}.csv" ];then
 			###
 				#david 18/10/2018 dos2unix added
-				"${DOS2UNIX}" "${RUNS_DIR}${SSHEET_FOLDER}/${PREFIX}.csv"
+				"${DOS2UNIX}" "${RUNS_DIR}${SSHEET_DIR_NAME}/${PREFIX}.csv"
 				###david 19/08/16 copy run folder in  'conversion_tmp' subfolder
-				echo "$(date) INFO copying ${RUN} in ${TARGET} folder"
-				"${RSYNC}" -aq --exclude='Data' "${RUNS_DIR}${RUN}" "${RUNS_DIR}${TARGET}/"
+				#echo "$(date) INFO copying ${RUN} in ${TARGET} folder"
+				#"${RSYNC}" -aq --exclude='Data' "${RUNS_DIR}${RUN}" "${RUNS_DIR}${TARGET}/"
 				echo "$(date) INFO launching ${BCL2FASTQ} on ${RUN}"						
 				#pass ${RUN} to running
 				if [ -z "${RUN_ARRAY[${RUN}]}" ];then
@@ -145,12 +144,18 @@ do
 				####change samplesheet management 160818 david
 				#nohup ${BCL2FASTQ} -R ${RUNS_DIR}${RUN} --stats-dir ${RUNS_DIR}conversion_tmp/${RUN}/bcl2fastq --reports-dir ${RUNS_DIR}conversion_tmp/${RUN}/bcl2fastq --barcode-mismatches 0 --no-lane-splitting --sample-sheet ${RUNS_DIR}samplesheets/${PREFIX}.csv -o ${RUNS_DIR}conversion_tmp/${RUN}/FastQs > ${RUNS_DIR}conversion_tmp/${RUN}/bcl2fastq/bcl2fastq.log 2>&1
 				####
-				mkdir -p "${RUNS_DIR}${TARGET}/${RUN}/bcl2fastq"				
-				touch "${RUNS_DIR}${TARGET}/${RUN}/bcl2fastq/bcl2fastq.log"
-				"${RSYNC}" -aq "${RUNS_DIR}${SSHEET_FOLDER}/${PREFIX}.csv" "${RUNS_DIR}${TARGET}/${RUN}/bcl2fastq/SampleSheet.csv"
-				mkdir -p "${RUNS_DIR}${TARGET}/${RUN}/FastQs"
+				mkdir -p "${RUNS_DIR}${RUN}/bcl2fastq"				
+				touch "${RUNS_DIR}${RUN}/bcl2fastq/bcl2fastq.log"
+				"${RSYNC}" -aq "${RUNS_DIR}${SSHEET_DIR_NAME}/${PREFIX}.csv" "${RUNS_DIR}${RUN}/bcl2fastq/SampleSheet.csv"
+				mkdir -p "${RUNS_DIR}${RUN}/FastQs"
 				####change samplesheet management 160818 david
-				"${BCL2FASTQ}" -R "${RUNS_DIR}${RUN}" --stats-dir "${RUNS_DIR}${TARGET}/${RUN}/bcl2fastq" --reports-dir "${RUNS_DIR}${TARGET}/${RUN}/bcl2fastq" --barcode-mismatches 0 --no-lane-splitting --sample-sheet "${RUNS_DIR}${SSHEET_FOLDER}/${PREFIX}.csv" -o "${RUNS_DIR}${TARGET}/${RUN}/FastQs" > "${RUNS_DIR}${TARGET}/${RUN}/bcl2fastq/bcl2fastq.log" 2>&1
+				"${BCL2FASTQ}" -R "${RUNS_DIR}${RUN}" --stats-dir "${RUNS_DIR}${RUN}/bcl2fastq" --reports-dir "${RUNS_DIR}${RUN}/bcl2fastq" --barcode-mismatches 0 --no-lane-splitting --sample-sheet "${RUNS_DIR}${SSHEET_DIR_NAME}/${PREFIX}.csv" -o "${RUNS_DIR}${RUN}/FastQs" > "${RUNS_DIR}${RUN}/bcl2fastq/bcl2fastq.log" 2>&1
+				#mkdir -p "${RUNS_DIR}${TARGET}/${RUN}/bcl2fastq"				
+				#touch "${RUNS_DIR}i${TARGET}/${RUN}/bcl2fastq/bcl2fastq.log"
+				#"${RSYNC}" -aq "${RUNS_DIR}${SSHEET_FOLDER}/${PREFIX}.csv" "${RUNS_DIR}${TARGET}/${RUN}/bcl2fastq/SampleSheet.csv"
+				#mkdir -p "${RUNS_DIR}${TARGET}/${RUN}/FastQs"
+				####change samplesheet management 160818 david
+				#"${BCL2FASTQ}" -R "${RUNS_DIR}${RUN}" --stats-dir "${RUNS_DIR}${TARGET}/${RUN}/bcl2fastq" --reports-dir "${RUNS_DIR}${TARGET}/${RUN}/bcl2fastq" --barcode-mismatches 0 --no-lane-splitting --sample-sheet "${RUNS_DIR}${SSHEET_FOLDER}/${PREFIX}.csv" -o "${RUNS_DIR}${TARGET}/${RUN}/FastQs" > "${RUNS_DIR}${TARGET}/${RUN}/bcl2fastq/bcl2fastq.log" 2>&1
 				#-r -d -p -w: default is ok on VM
 				#--fastq-compression-level : default tested with 9  increased treatment 100% time for <10% space gained
 				#check exit status - if ne 0 then put run in error (status 1)
@@ -161,7 +166,7 @@ do
 					RUN_ARRAY[${RUN}]=2
 					#run md5 check sum on fastqs
 					if [ "${MD5}" == true ];then
-						"${MD5EXE}" ${RUNS_DIR}${TARGET}/${RUN}/FastQs/*.fastq.gz >"${RUNS_DIR}${TARGET}/${RUN}/FastQs/md5.txt" 2>&1
+						"${MD5EXE}" ${RUNS_DIR}${RUN}/FastQs/*.fastq.gz >"${RUNS_DIR}${RUN}/FastQs/md5.txt" 2>&1
 					fi
 					#move run in 'converted' folder
 					#mv "${RUNS_DIR}conversion_tmp/${RUN}" "${RUNS_DIR}converted/${RUN}" && echo "$(date) ${RUN} moved to ${RUNS_DIR}converted/${RUN}"
@@ -175,22 +180,22 @@ do
 						#echo "$(date) ${RUN} moved to ${RUNS_DIR}converted/${RUN}"
 					#fi
 					#end change david
-					if [ -e "${RUNS_DIR}${TARGET}/${RUN}/nosamplesheet.txt" ];then
-						rm "${RUNS_DIR}${TARGET}/${RUN}/nosamplesheet.txt"
+					if [ -e "${RUNS_DIR}${RUN}/nosamplesheet.txt" ];then
+						rm "${RUNS_DIR}${RUN}/nosamplesheet.txt"
 					fi
-					touch "${RUNS_DIR}${TARGET}/${RUN}/FASTQ_complete.txt"
-					"${BCL2FASTQ}" --version > "${RUNS_DIR}${TARGET}/${RUN}/FASTQ_complete.txt" 2>&1					
-					echo "$(date) INFO ${RUN} converted"
+					touch "${RUNS_DIR}${RUN}/FASTQ_complete.txt"
+					"${BCL2FASTQ}" --version > "${RUNS_DIR}FASTQ_complete.txt" 2>&1
+					echo "$(date) INFO ${RUN} FASTQ conversion terminated"
 				else
 					echo "$(date) ERROR in bcl2fastq execution: relaunching with  --ignore-missing-bcls --ignore-missing-filter --ignore-missing-positions"
 					#nohup ${BCL2FASTQ} -R ${RUNS_DIR}${RUN} --stats-dir ${RUNS_DIR}conversion_tmp/${RUN}/bcl2fastq --reports-dir ${RUNS_DIR}conversion_tmp/${RUN}/bcl2fastq --barcode-mismatches 0 --no-lane-splitting --sample-sheet ${RUNS_DIR}samplesheets/${PREFIX}.csv --ignore-missing-bcls --ignore-missing-filter --ignore-missing-positions -o ${RUNS_DIR}conversion_tmp/${RUN}/FastQs > ${RUNS_DIR}conversion_tmp/${RUN}/bcl2fastq/bcl2fastq.log 2>&1
-					"${BCL2FASTQ}" -R "${RUNS_DIR}${RUN}" --stats-dir "${RUNS_DIR}${TARGET}/${RUN}/bcl2fastq" --reports-dir "${RUNS_DIR}${TARGET}/${RUN}/bcl2fastq" --barcode-mismatches 0 --no-lane-splitting --sample-sheet "${RUNS_DIR}${SSHEET_FOLDER}/${PREFIX}.csv" --ignore-missing-bcls --ignore-missing-filter --ignore-missing-positions -o "${RUNS_DIR}${TARGET}/${RUN}/FastQs" > "${RUNS_DIR}${TARGET}/${RUN}/bcl2fastq/bcl2fastq.log" 2>&1
+					"${BCL2FASTQ}" -R "${RUNS_DIR}${RUN}" --stats-dir "${RUNS_DIR}${RUN}/bcl2fastq" --reports-dir "${RUNS_DIR}${RUN}/bcl2fastq" --barcode-mismatches 0 --no-lane-splitting --sample-sheet "${RUNS_DIR}${SSHEET_FOLDER}/${PREFIX}.csv" --ignore-missing-bcls --ignore-missing-filter --ignore-missing-positions -o "${RUNS_DIR}${RUN}/FastQs" > "${RUNS_DIR}${RUN}/bcl2fastq/bcl2fastq.log" 2>&1
 					if [ "$?" -eq 0 ];then
 						##Change value on array and file to done		
 						sed -i -e "s/${RUN}=1/${RUN}=2/g" "${RUNS_FILE}"
 						RUN_ARRAY[${RUN}]=2
 						if [ "${MD5}" == true ];then
-							 ${RUNS_DIR}${TARGET}/${RUN}/FastQs/*.fastq.gz >"${RUNS_DIR}${TARGET}/${RUN}/FastQs/md5.txt" 2>&1
+							 ${RUNS_DIR}${RUN}/FastQs/*.fastq.gz >"${RUNS_DIR}${RUN}/FastQs/md5.txt" 2>&1
 						fi
 						#move run in 'converted' folder
 						#mv "${RUNS_DIR}conversion_tmp/${RUN}" "${RUNS_DIR}converted/${RUN}" && echo "$(date) ${RUN} moved to ${RUNS_DIR}converted/${RUN}"
@@ -201,11 +206,11 @@ do
                                                 #	echo "$(date) ${RUN} moved to ${RUNS_DIR}converted/${RUN}"
                                         	#fi
                                         	#end change david
-						if [ -e "${RUNS_DIR}${TARGET}/${RUN}/nosamplesheet.txt" ];then
-							rm "${RUNS_DIR}${TARGET}/${RUN}/nosamplesheet.txt"
+						if [ -e "${RUNS_DIR}${RUN}/nosamplesheet.txt" ];then
+							rm "${RUNS_DIR}${RUN}/nosamplesheet.txt"
 						fi
-						touch "${RUNS_DIR}${TARGET}/${RUN}/FASTQ_complete.txt"
-						"${BCL2FASTQ}" --version > "${RUNS_DIR}${TARGET}/${RUN}/FASTQ_complete.txt" 2>&1	
+						touch "${RUNS_DIR}${RUN}/FASTQ_complete.txt"
+						"${BCL2FASTQ}" --version > "${RUNS_DIR}${RUN}/FASTQ_complete.txt" 2>&1	
 						echo "$(date) INFO ${RUN} converted with --ignore-missing-bcls --ignore-missing-filter --ignore-missing-positions"
 					else
 						echo "$(date) ERROR in bcl2fastq execution: check log file ${RUNS_DIR}${RUN}/bcl2fastq/bcl2fastq.log."
