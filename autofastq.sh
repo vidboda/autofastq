@@ -183,13 +183,13 @@ do
 					if [ -e "${RUNS_DIR}${RUN}/nosamplesheet.txt" ];then
 						rm "${RUNS_DIR}${RUN}/nosamplesheet.txt"
 					fi
-					touch "${RUNS_DIR}${RUN}/FASTQ_complete.txt"
-					"${BCL2FASTQ}" --version > "${RUNS_DIR}FASTQ_complete.txt" 2>&1
+					#touch "${RUNS_DIR}${RUN}/FASTQ_complete.txt"
+					"${BCL2FASTQ}" --version > "${RUNS_DIR}${RUN}/FASTQ_complete.txt" 2>&1
 					echo "$(date) INFO ${RUN} FASTQ conversion terminated"
 				else
 					echo "$(date) ERROR in bcl2fastq execution: relaunching with  --ignore-missing-bcls --ignore-missing-filter --ignore-missing-positions"
 					#nohup ${BCL2FASTQ} -R ${RUNS_DIR}${RUN} --stats-dir ${RUNS_DIR}conversion_tmp/${RUN}/bcl2fastq --reports-dir ${RUNS_DIR}conversion_tmp/${RUN}/bcl2fastq --barcode-mismatches 0 --no-lane-splitting --sample-sheet ${RUNS_DIR}samplesheets/${PREFIX}.csv --ignore-missing-bcls --ignore-missing-filter --ignore-missing-positions -o ${RUNS_DIR}conversion_tmp/${RUN}/FastQs > ${RUNS_DIR}conversion_tmp/${RUN}/bcl2fastq/bcl2fastq.log 2>&1
-					"${BCL2FASTQ}" -R "${RUNS_DIR}${RUN}" --stats-dir "${RUNS_DIR}${RUN}/bcl2fastq" --reports-dir "${RUNS_DIR}${RUN}/bcl2fastq" --barcode-mismatches 0 --no-lane-splitting --sample-sheet "${RUNS_DIR}${SSHEET_FOLDER}/${PREFIX}.csv" --ignore-missing-bcls --ignore-missing-filter --ignore-missing-positions -o "${RUNS_DIR}${RUN}/FastQs" > "${RUNS_DIR}${RUN}/bcl2fastq/bcl2fastq.log" 2>&1
+					"${BCL2FASTQ}" -R "${RUNS_DIR}${RUN}" --stats-dir "${RUNS_DIR}${RUN}/bcl2fastq" --reports-dir "${RUNS_DIR}${RUN}/bcl2fastq" --barcode-mismatches 0 --no-lane-splitting --sample-sheet "${RUNS_DIR}${SSHEET_DIR_NAME}/${PREFIX}.csv" --ignore-missing-bcls --ignore-missing-filter --ignore-missing-positions -o "${RUNS_DIR}${RUN}/FastQs" > "${RUNS_DIR}${RUN}/bcl2fastq/bcl2fastq.log" 2>&1
 					if [ "$?" -eq 0 ];then
 						##Change value on array and file to done		
 						sed -i -e "s/${RUN}=1/${RUN}=2/g" "${RUNS_FILE}"
@@ -209,7 +209,7 @@ do
 						if [ -e "${RUNS_DIR}${RUN}/nosamplesheet.txt" ];then
 							rm "${RUNS_DIR}${RUN}/nosamplesheet.txt"
 						fi
-						touch "${RUNS_DIR}${RUN}/FASTQ_complete.txt"
+						#touch "${RUNS_DIR}${RUN}/FASTQ_complete.txt"
 						"${BCL2FASTQ}" --version > "${RUNS_DIR}${RUN}/FASTQ_complete.txt" 2>&1	
 						echo "$(date) INFO ${RUN} converted with --ignore-missing-bcls --ignore-missing-filter --ignore-missing-positions"
 					else
