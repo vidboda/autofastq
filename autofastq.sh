@@ -195,7 +195,7 @@ do
 						sed -i -e "s/${RUN}=1/${RUN}=2/g" "${RUNS_FILE}"
 						RUN_ARRAY[${RUN}]=2
 						if [ "${MD5}" == true ];then
-							 ${RUNS_DIR}${RUN}/FastQs/*.fastq.gz >"${RUNS_DIR}${RUN}/FastQs/md5.txt" 2>&1
+							 "${MD5EXE}" ${RUNS_DIR}${RUN}/FastQs/*.fastq.gz >"${RUNS_DIR}${RUN}/FastQs/md5.txt" 2>&1
 						fi
 						#move run in 'converted' folder
 						#mv "${RUNS_DIR}conversion_tmp/${RUN}" "${RUNS_DIR}converted/${RUN}" && echo "$(date) ${RUN} moved to ${RUNS_DIR}converted/${RUN}"
