@@ -17,15 +17,29 @@ The script just checks the run directory and looks for new runs that possibly ca
 
 Clone the repository, then complete the autofastq.conf.empty file with the following paths and rename it to autofastq.conf:
 
-BASE_DIR=full/path/to/your/illumina/folder
+BASE_DIR=/full/path/to/your/illumina/folder
 
-RUNS_DIR=actual/partial/path/to/the/runs (from ${BASE_DIR})
+RUNS_DIR=/actual/path/to/the/runs (from $BASE_DIR)
 
-SERVICE=name_of_script.sh
+TRIGGER_FILE=name of file to be searched to trigger bcl2fatsq in RUNS_DIR, e.g. RTAComplete.txt or CopyComplete.txt
 
-RUNS_FILE=full/path/to/the/file/runs.txt
+SSHEET_DIR_NAME=samplesheets(samplesheets folder basename inside $RUNS_DIR)
 
-BCL2FASTQ=path/to/the/executable/bcl2fastq
+SERVICE=script_name(autofastq.sh)
+
+RUNS_FILE=/full/path/to/the/file/runs.txt
+
+BCL2FASTQ=/path/to/the/executable/bcl2fastq
+
+DOS2UNIX=/patho/to/dos2unix
+
+RSYNC=/path/to/rsync
+
+MD5=true
+
+MD5EXE=/path/to/md5(sum)
+
+
 
 * You should have a ${RUNS_DIR}/samplesheets directory with read permissions.
 
