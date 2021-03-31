@@ -37,6 +37,10 @@ which corresponds to the 6 first characters of you run folder (and which is actu
 
 * Rename runs.txt.empty to runs.txt
 
+* change line 47 of the autofastq.sh script to point to your autofastq.conf file:
+
+CONFIG_FILE='/path/to/autofastq/autofastq.conf'
+
 * Cron autofastq, ex, launch every minute:
 
 \* \* \* \* \* /path/to/autofastq.sh >> /path/to/run/dir/autofastq.log 2>&1
