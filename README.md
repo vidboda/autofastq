@@ -27,9 +27,7 @@ RUNS_FILE=full/path/to/the/file/runs.txt
 
 BCL2FASTQ=path/to/the/executable/bcl2fastq
 
-* You should have a directory ${RUNS_DIR}/converted and write permissions on ${RUNS_DIR}.
-
-* You should also have a ${RUNS_DIR}/conversion_tmp with write permissions and a ${RUNS_DIR}/samplesheets with read permissions.
+* You should have a ${RUNS_DIR}/samplesheets directory with read permissions.
 
 In ${RUNS_DIR}/samplesheets the script expects to find sample sheets which are Illumina regular sample sheets, however the script will look for a sample sheet with the following name convention:
 
