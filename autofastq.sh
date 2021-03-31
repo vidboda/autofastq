@@ -115,9 +115,8 @@ do
 		###get run prefix for samplesheet management 160818 david
 		PREFIX=$(echo ${RUN} | cut -d '_' -f 1)
 		###
-		#now we must look for the RTAComplete.txt file
-		if [ -e "${RUNS_DIR}${RUN}/RTAComplete.txt" ];then # && [ ! -e "${RUNS_DIR}${TARGET}/${RUN}/RTAComplete.txt" ]; then
-			#if [ -e "${RUNS_DIR}${RUN}/SampleSheet.csv" ];then
+		#now we must look for the TRIGGER_FILE, e.g. CopyComplete.txt or RTAComplete file
+		if [ -e "${RUNS_DIR}${RUN}/${TRIGGER_FILE}" ];then
 			###check for samplesheet presence 160818 david
 			if [ -e "${RUNS_DIR}${SSHEET_DIR_NAME}/${PREFIX}.csv" ];then
 			###
