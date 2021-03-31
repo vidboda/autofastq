@@ -1,5 +1,6 @@
 BASE_DIR=/full/path/to/your/illumina/folder
 RUNS_DIR=/actual/path/to/the/runs
+TRIGGER_FILE=name of file to be searched to trigger bcl2fatsq in RUNS_DIR, e.g. RTAComplete.txt or CopyComplete.txt
 SSHEET_DIR_NAME=samplesheets(samplesheets folder basename inside $RUNS_DIR)
 SERVICE=script_name(autofastq.sh)
 RUNS_FILE=/full/path/to/the/file/runs.txt
